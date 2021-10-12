@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies</title>
+    <style>
+        #nav{
+            display: flex;
+            width: 70%;
+            padding: .9%;
+            border: 1px solid black;
+            background-color:cadetblue;
+            margin: 2% 13% ;
+        }
+        .logo{
+            font-weight: 700;
+            font-size: 25px;
+            margin: 0% 6%;
+            
+        }
+        #mov{
+            width: 50%;
+            text-align: center;
+            border-radius: 5px;
+            outline: none;
+            font-size: 20px;
+            text-shadow: 10px black;
+        }
+        #data{
+          justify-content: center;
+          font-size: 18px;
+          margin: 2% 13%;
+                                 ;
+        }
+        #btn{
+            background-color: darkgray;
+            box-shadow: black;
+            outline: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header id="nav" >
+     <div class="logo">Virtual World</div>
+    <input type="text" id="mov" placeholder="Search Movies Here....." />
+    <button onclick="Movies()" id = "btn">Search Movies</button>
+    </header>
+    <div id="data"></div>
+</body>
+<script>
+
+      let container = document.getElementById("data");
+
+      async function Movies(){
+
+        let movie = document.getElementById("mov").value;
+
+
+          let res = await fetch(`https://www.omdbapi.com/?t=${movie}&apikey=4a279b03`);
+      
+      
+      let data = await res.json();
+      console.log('data:', data)
+                 
+       showMovie(data)
+       if(data.imdbRating > 8.5){
+           let recommanded = document.createElement("p");
+           recommanded.innerText = "Recommanded";
+           recommanded.style.textAlign = "center";
+           recommanded.style.fontWeight = "600";
+
+           container.append(recommanded);
+       }
+
+      }
+
+      function showMovie(mo){
+
+        container.innerHTML = null;
+        let div = document.createElement("div");
+        div.style.textAlign = "center";
+        // div.style.width = "60%"
+        
+
+        let name = document.createElement("p");
+
+        name.innerText = "Movie_Name :" + mo.Title;
+
+        let poster = document.createElement("img")
+
+        poster.src = mo.Poster;
+
+        let date = document.createElement("p");
+
+        date.innerText = "Released On :" + mo.Released;
+
+        let imdb = document.createElement("p");
+
+        imdb.innerText = "IMDb-Rating :" + mo.imdbRating+"/10";
+
+        let details = document.createElement("p");
+        
+
+        details.innerText = mo.Plot;
+
+        div.append(poster,details,name,date,imdb)
+
+        container.append(div)
+
+
+
+      }
+</script>
+</html>
